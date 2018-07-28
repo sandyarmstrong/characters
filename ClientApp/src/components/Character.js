@@ -1,27 +1,16 @@
 //@ts-check
 import React, { Component } from 'react';
-import { Badge, Col, Grid, Modal, Row, Table } from 'react-bootstrap';
+import { Badge, Modal, Table } from 'react-bootstrap';
 
-export class Character extends Component {
-  displayName = Character.name
+export class CharacterDetails extends Component {
+  displayName = CharacterDetails.name
 
   constructor(props) {
     super(props);
-    this.state = { character: null, loading: true, leveling: false };
-
-    fetch('api/Character/Summary/1')
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ character: data, loading: false });
-      });
   }
 
-  levelUp() {
-    this.setState({ leveling: true });
-  }
-
-  handleDoneLeveling() {
-    this.setState({ leveling: false });
+  render() {
+    return this.renderCharacter(this.props.character);
   }
 
   static renderCombatModifier(cm) {
@@ -57,12 +46,8 @@ export class Character extends Component {
         <div></div>
       );
 
-    // if (character.levelsAvailable > 0);
-
     return (
       <div>
-        <h1>{character.name} ({character.playerName}) <Badge onClick={e => this.levelUp()}>{character.levelsAvailable}</Badge></h1>
-
         <Table striped bordered condensed hover>
           <tbody>
             <tr>
@@ -109,7 +94,7 @@ export class Character extends Component {
               <tr>
                 <td>{attack.name}</td>
                 <td>{attack.combatModifier.combatType}</td>
-                <td>{Character.renderCombatModifier(attack.combatModifier)}</td>
+                <td>{CharacterDetails.renderCombatModifier(attack.combatModifier)}</td>
                 <td>{attack.combatModifier.failPercentage}%</td>
               </tr>)}
           </tbody>
@@ -142,10 +127,48 @@ export class Character extends Component {
               <tr>
                 <td>{item.type}</td>
                 <td>{item.name}</td>
-                <td>{Character.renderBuffList(item.modifiers)}</td>
+                <td>{CharacterDetails.renderBuffList(item.modifiers)}</td>
               </tr>)}
           </tbody>
         </Table>
+      </div>
+    )
+  }
+}
+
+export class Character extends Component {
+  displayName = Character.name
+
+  constructor(props) {
+    super(props);
+    this.state = { character: null, loading: true, leveling: false };
+
+    fetch('api/Character/Summary/1')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ character: data, loading: false });
+      });
+  }
+
+  levelUp() {
+    this.setState({ leveling: true });
+  }
+
+  handleDoneLeveling() {
+    this.setState({ leveling: false });
+  }
+
+  renderCharacter(character) {
+    if (character == null)
+      return (
+        <div></div>
+      );
+
+    return (
+      <div>
+        <h1>{character.name} ({character.playerName}) <Badge onClick={e => this.levelUp()}>{character.levelsAvailable}</Badge></h1>
+
+        <CharacterDetails character={character}/>
       </div>
     )
   }
