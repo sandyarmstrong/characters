@@ -27,9 +27,9 @@ export class Character extends Component {
   static renderCombatModifier(cm) {
     var mod = "";
     if (cm.remainder > 0)
-      mod = " + " + cm.remainder;
+      mod += " + " + cm.remainder;
     else if (cm.remainder < 0)
-      mod = " - " + Math.abs(cm.remainder);
+      mod += cm.remainder;
 
     var dice = "";
     if (cm.diceCount > 0)
