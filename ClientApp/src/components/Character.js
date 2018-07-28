@@ -40,6 +40,17 @@ export class Character extends Component {
     );
   }
 
+  static renderBuffList(buffs) {
+    var buffsStr = "";
+    for (var i = 0; i < buffs.length; i++) {
+      const mod = buffs [i].modifier;
+      buffsStr += buffs [i].type + (mod > 0 ? "+" : "") + mod;
+      if (i < buffs.length - 1)
+        buffsStr += ", ";
+    }
+    return buffsStr;
+  }
+
   renderCharacter(character) {
     if (character == null)
       return (
@@ -115,6 +126,23 @@ export class Character extends Component {
               <tr>
                 <td>{defense.type}</td>
                 <td>{defense.modifier}</td>
+              </tr>)}
+          </tbody>
+        </Table>
+
+        <h2>Items</h2>
+        <Table striped bordered condensed hover>
+          <thead>
+            <th>Type</th>
+            <th>Name</th>
+            <th>Buffs</th>
+          </thead>
+          <tbody>
+            {character.items.map(item =>
+              <tr>
+                <td>{item.type}</td>
+                <td>{item.name}</td>
+                <td>{Character.renderBuffList(item.modifiers)}</td>
               </tr>)}
           </tbody>
         </Table>

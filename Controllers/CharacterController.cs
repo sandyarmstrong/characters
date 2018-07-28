@@ -28,6 +28,9 @@ namespace characters.Controllers
                     new Weapon ("Dueling Sword", CombatType.Melee),
                     new Weapon ("Dueling Dagger", CombatType.Melee),
                     new Weapon ("Throwing Dagger", CombatType.Ranged),
+                },
+                new [] {
+                    Item.CreateArmor (3, "Studded Leather"),
                 });
         }
 
@@ -254,6 +257,61 @@ namespace characters.Controllers
     // TODO: Items and relevant slots (think amulets, which can only be
     //       worn one at a time)
 
+    public enum ItemType
+    {
+        Trinket,
+        Shield,
+        Armor,
+        Amulet,
+        Ring,
+        //Weapon?
+    }
+
+    public class Item
+    {
+        public ItemType Type { get; }
+
+        public string Name { get; }
+
+        public IReadOnlyList<Buff> Modifiers { get; }
+
+        public Item (
+            ItemType type,
+            string name = null,
+            IReadOnlyList<Buff> modifiers = null)
+        {
+            Type = type;
+            Name = name;
+            Modifiers = modifiers?.ToArray ();
+        }
+
+        public static Item CreateShield (
+            int defense,
+            string name = null,
+            IReadOnlyList<Buff> modifiers = null)
+            => new Item (
+                ItemType.Shield,
+                name,
+                new [] {
+                    new Buff (BuffType.MeleeDefense, defense),
+                    new Buff (BuffType.RangedDefense, defense),
+                    new Buff (BuffType.SpellDefense, defense),
+                }.Concat (modifiers ?? Array.Empty<Buff> ()).ToArray ());
+
+        public static Item CreateArmor (
+            int defense,
+            string name = null,
+            IReadOnlyList<Buff> modifiers = null)
+            => new Item (
+                ItemType.Armor,
+                name,
+                new [] {
+                    new Buff (BuffType.MeleeDefense, defense),
+                    new Buff (BuffType.RangedDefense, defense),
+                    new Buff (BuffType.SpellDefense, defense),
+                }.Concat (modifiers ?? Array.Empty<Buff> ()).ToArray ());
+    }
+
     public class Character
     {
         public string Name { get; }
@@ -282,6 +340,8 @@ namespace characters.Controllers
 
         public IReadOnlyList<Weapon> Weapons { get; }
 
+        public IReadOnlyList<Item> Items { get; }
+
         public Character (
             string name,
             string playerName,
@@ -291,30 +351,44 @@ namespace characters.Controllers
             int strength,
             int dexterity,
             int mind,
-            IReadOnlyList<Weapon> weapons
-        )
+            IReadOnlyList<Weapon> weapons,
+            IReadOnlyList<Item> items)
         {
-            Name = name;
-            PlayerName = playerName;
+            Name = name
+                ?? throw new ArgumentNullException (nameof (name));
+            PlayerName = playerName
+                ?? throw new ArgumentNullException (nameof (playerName));
             Level = level;
             LevelsAvailable = levelsAvailable;
             Experience = experience;
             Strength = strength;
             Dexterity = dexterity;
             Mind = mind;
-            Weapons = weapons;
+            Weapons = weapons.ToArray ();
+            Items = items?.ToArray () ?? Array.Empty<Item> ();
+            // TODO: Does it make sense that weapons are not just items?
 
             // TODO: Account for item/weapon buffs throughout
 
             HitPoints = level * 6;
             Heroism = level;
 
-            // TODO: Armor/shields, and use them in defenses
-            Defenses = new List<Defense> {
-                new Defense (CombatType.Melee, strength),
-                new Defense (CombatType.Ranged, dexterity),
-                new Defense (CombatType.Spell, mind),
-            };
+            var buffs = new Dictionary<BuffType, int> ();
+
+            int GetBuff (BuffType type)
+                => buffs.TryGetValue (type, out var buff) ? buff : 0;
+
+            // TODO: Enforce item slots (can't have 2 active shields, etc)
+            foreach (var item in Items) {
+                foreach (var buff in item.Modifiers) {
+                    if (buffs.TryGetValue (buff.Type, out var prevBuff))
+                        buffs [buff.Type] = prevBuff + buff.Modifier;
+                    else
+                        buffs [buff.Type] = buff.Modifier;
+                }
+            }
+
+            // TODO: Get buffs from weapons, too
 
             Attack CreateFromWeapon (Weapon weapon, int abilityVal, int modifiedAbilityVal)
             {
@@ -382,6 +456,18 @@ namespace characters.Controllers
                 rangedAttack,
                 spellAttack,
             };
+
+            Defenses = new List<Defense> {
+                new Defense (
+                    CombatType.Melee,
+                    strength + GetBuff (BuffType.MeleeDefense)),
+                new Defense (
+                    CombatType.Ranged,
+                    dexterity + GetBuff (BuffType.RangedDefense)),
+                new Defense (
+                    CombatType.Spell,
+                    mind + GetBuff (BuffType.SpellDefense)),
+            };
         }
 
         public Character WithUpgrades (List<Buff> upgrades)
@@ -422,7 +508,8 @@ namespace characters.Controllers
                 Strength + strBuff,
                 Dexterity + dexBuff,
                 Mind + mindBuff,
-                Weapons);
+                Weapons,
+                Items);
         }
     }
 }
