@@ -1,3 +1,4 @@
+//@ts-check
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Glyphicon, Nav, Navbar, NavItem } from 'react-bootstrap';
@@ -19,6 +20,11 @@ export class NavMenu extends Component {
         <Navbar.Collapse>
           <Nav>
             <LinkContainer to={'/'} exact>
+              <NavItem>
+                <Glyphicon glyph='home' /> Character
+              </NavItem>
+            </LinkContainer>
+            <LinkContainer to={'/home'} exact>
               <NavItem>
                 <Glyphicon glyph='home' /> Home
               </NavItem>
