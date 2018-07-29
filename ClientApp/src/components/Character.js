@@ -1,6 +1,6 @@
 //@ts-check
 import React, { Component } from 'react';
-import { Badge, Modal } from 'react-bootstrap';
+import { Badge, Button, Modal } from 'react-bootstrap';
 import { CharacterDetails } from './CharacterDetails';
 import { Leveler } from './Leveler';
 
@@ -60,6 +60,17 @@ export class Character extends Component {
           <Modal.Body>
             <Leveler id="1" character={this.state.character}/>
           </Modal.Body>
+          <Modal.Footer>
+            <Button
+              onClick={e => this.handleDoneLeveling()}>
+              Close
+            </Button>
+            <Button
+              bsStyle="primary"
+              onClick={e => this.handleDoneLeveling()}>
+              Save changes
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
     )
