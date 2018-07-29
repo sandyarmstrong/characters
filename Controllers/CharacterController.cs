@@ -502,7 +502,7 @@ namespace characters.Controllers
             return new Character (
                 Name,
                 PlayerName,
-                Level,
+                Level + totalBuff,
                 LevelsAvailable - totalBuff,
                 Experience,
                 Strength + strBuff,
