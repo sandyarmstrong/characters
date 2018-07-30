@@ -124,12 +124,12 @@ export class Leveler extends Component {
 
     return (
       <div>
-        <h2>
+        <h4>
           <Label
             bsStyle={this.getBuffButtonStyle(ability)}>
             {label}
           </Label>
-        </h2>
+        </h4>
         <Button
           disabled={buff == 0}
           onClick={_ => this.handleAbilityChange(ability, -1)}
@@ -144,7 +144,7 @@ export class Leveler extends Component {
           onClick={_ => this.handleAbilityChange(ability, 1)}
           bsSize="small">
           +
-            </Button>
+        </Button>
       </div>
     );
   }
@@ -152,7 +152,6 @@ export class Leveler extends Component {
   renderModalBody() {
     return (
       <div>
-        <p>Levels Available: {this.getDisplayCharacter().levelsAvailable} / {this.props.character.levelsAvailable}</p>
         <Grid fluid>
           <Row>
             <Col sm={4}>
@@ -199,8 +198,11 @@ export class Leveler extends Component {
     return (
       <div>
         <Modal show={this.props.show} onHide={e => this.props.onCanceled()}>
-          <Modal.Header closeButton>
-            <Modal.Title>Level Up!</Modal.Title>
+          <Modal.Header>
+            <Modal.Title>
+              Level Up! 
+              ({this.getDisplayCharacter().levelsAvailable} / {this.props.character.levelsAvailable} available)
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             {this.renderModalBody()}
