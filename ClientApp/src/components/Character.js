@@ -11,7 +11,11 @@ export class Character extends Component {
     super(props);
     this.state = { character: null, loading: true, leveling: false };
 
-    fetch('api/Character/Summary/1')
+    var id = 1;
+    if (props.match && props.match.params && props.match.params.id)
+      id = props.match.params.id;
+
+    fetch('api/Character/Summary/' + id)
       .then(response => response.json())
       .then(data => {
         this.setState({ character: data, loading: false });

@@ -12,13 +12,20 @@ namespace characters.Controllers
     [Route("api/[controller]/[action]")]
     public class CharacterController : Controller
     {
-        // TODO: Real DB please
+        // TODO: Real DB please (or, screw that, just persist to json)
         static readonly Dictionary<string, Character> CharacterDatabase =
             new Dictionary<string, Character> ();
-        
+
         static CharacterController ()
         {
-            CharacterDatabase ["1"] = new Character (
+            ResetDatabase ();
+        }
+        
+        static void ResetDatabase ()
+        {
+            CharacterDatabase.Clear ();
+            UpsertCharacter (new Character (
+                "1",
                 "Berresor",
                 "Sandy",
                 4,
@@ -34,7 +41,38 @@ namespace characters.Controllers
                 },
                 new [] {
                     Item.CreateArmor (3, "Studded Leather"),
-                });
+                }));
+        }
+
+        static void UpsertCharacter (Character character)
+        {
+            CharacterDatabase [character.Id] = character;
+        }
+
+        [HttpGet]
+        public IReadOnlyList<Character> All ()
+        {
+            return CharacterDatabase.Values.ToArray ();
+        }
+
+        [HttpPost]
+        public IReadOnlyList<Character> Reset ()
+        {
+            ResetDatabase ();
+            return All ();
+        }
+
+        [HttpPost]
+        public IReadOnlyList<Character> GrantLevels (
+            [FromBody] List<string> ids)
+        {
+            foreach (var id in ids) {
+                if (!CharacterDatabase.TryGetValue (id, out var character))
+                    continue; // TODO: Log it
+                UpsertCharacter (character.WithLevelsAvailable (
+                    character.LevelsAvailable + 1));
+            }
+            return All ();
         }
 
         [HttpGet("{id}")]

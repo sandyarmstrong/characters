@@ -7,6 +7,8 @@ namespace characters.Models
 {
     public class Character
     {
+        public string Id { get; }
+
         public string Name { get; }
 
         public string PlayerName { get; }
@@ -36,6 +38,7 @@ namespace characters.Models
         public IReadOnlyList<Item> Items { get; }
 
         public Character (
+            string id,
             string name,
             string playerName,
             int level,
@@ -47,6 +50,8 @@ namespace characters.Models
             IReadOnlyList<Weapon> weapons,
             IReadOnlyList<Item> items)
         {
+            Id = id
+                ?? throw new ArgumentNullException (nameof (id));
             Name = name
                 ?? throw new ArgumentNullException (nameof (name));
             PlayerName = playerName
@@ -163,6 +168,20 @@ namespace characters.Models
             };
         }
 
+        public Character WithLevelsAvailable (int levelsAvailable)
+            => new Character (
+                Id,
+                Name,
+                PlayerName,
+                Level,
+                levelsAvailable,
+                Experience,
+                Strength,
+                Dexterity,
+                Mind,
+                Weapons,
+                Items);
+
         public Character WithUpgrades (List<Buff> upgrades)
         {
             var strBuff = 0;
@@ -193,6 +212,7 @@ namespace characters.Models
                     $"{LevelsAvailable} are currently available");
             
             return new Character (
+                Id,
                 Name,
                 PlayerName,
                 Level + totalBuff,

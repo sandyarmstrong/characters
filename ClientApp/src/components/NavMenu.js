@@ -19,11 +19,6 @@ export class NavMenu extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LinkContainer to={'/'} exact>
-              <NavItem>
-                <Glyphicon glyph='home' /> Character Sheet
-              </NavItem>
-            </LinkContainer>
             <LinkContainer to={'/admin'} exact>
               <NavItem>
                 <Glyphicon glyph='home' /> DM Controls

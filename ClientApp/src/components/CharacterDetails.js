@@ -84,10 +84,12 @@ export class CharacterDetails extends Component {
         <h2>Attacks</h2>
         <Table striped bordered condensed hover>
           <thead>
-            <th>Attack</th>
-            <th>Type</th>
-            <th>CM</th>
-            <th>Failure Rate</th>
+            <tr>
+              <th>Attack</th>
+              <th>Type</th>
+              <th>CM</th>
+              <th>Failure Rate</th>
+            </tr>
           </thead>
           <tbody>
             {character.attacks.map(attack =>
@@ -103,8 +105,10 @@ export class CharacterDetails extends Component {
         <h2>Defense</h2>
         <Table striped bordered condensed hover>
           <thead>
-            <th>Type</th>
-            <th>Defense</th>
+            <tr>
+              <th>Type</th>
+              <th>Defense</th>
+            </tr>
           </thead>
           <tbody>
             {character.defenses.map(defense =>
@@ -118,9 +122,11 @@ export class CharacterDetails extends Component {
         <h2>Items</h2>
         <Table striped bordered condensed hover>
           <thead>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Buffs</th>
+            <tr>
+              <th>Type</th>
+              <th>Name</th>
+              <th>Buffs</th>
+            </tr>
           </thead>
           <tbody>
             {character.items.map(item =>

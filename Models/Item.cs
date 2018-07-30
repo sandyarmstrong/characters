@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace characters.Models
 {
-
     // TODO: Items and relevant slots (think amulets, which can only be
     //       worn one at a time)
     public class Item
