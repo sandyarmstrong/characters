@@ -13,7 +13,7 @@ export class NavMenu extends Component {
       <Navbar inverse fixedTop fluid collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to={'/'}>characters</Link>
+            <Link to={'/'}>Nanolite Tools</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -21,22 +21,12 @@ export class NavMenu extends Component {
           <Nav>
             <LinkContainer to={'/'} exact>
               <NavItem>
-                <Glyphicon glyph='home' /> Character
+                <Glyphicon glyph='home' /> Character Sheet
               </NavItem>
             </LinkContainer>
-            <LinkContainer to={'/home'} exact>
+            <LinkContainer to={'/admin'} exact>
               <NavItem>
-                <Glyphicon glyph='home' /> Home
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to={'/counter'}>
-              <NavItem>
-                <Glyphicon glyph='education' /> Counter
-              </NavItem>
-            </LinkContainer>
-            <LinkContainer to={'/fetchdata'}>
-              <NavItem>
-                <Glyphicon glyph='th-list' /> Fetch data
+                <Glyphicon glyph='home' /> DM Controls
               </NavItem>
             </LinkContainer>
           </Nav>
