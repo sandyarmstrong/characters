@@ -10,10 +10,11 @@ namespace characters.Controllers
     [Route("api/[controller]/[action]")]
     public class CharacterController : Controller
     {
-        readonly Dictionary<string, Character> CharacterDatabase =
+        // TODO: Real DB please
+        static readonly Dictionary<string, Character> CharacterDatabase =
             new Dictionary<string, Character> ();
         
-        public CharacterController ()
+        static CharacterController ()
         {
             CharacterDatabase ["1"] = new Character (
                 "Berresor",

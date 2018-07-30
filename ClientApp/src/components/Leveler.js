@@ -1,6 +1,6 @@
 //@ts-check
 import React, { Component } from 'react';
-import { Button, Grid, Row, Col, Label } from 'react-bootstrap';
+import { Button, Modal, Grid, Row, Col, Label } from 'react-bootstrap';
 import { CharacterDetails } from './CharacterDetails';
 
 export class Leveler extends Component {
@@ -10,7 +10,7 @@ export class Leveler extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      character: props.character,
+      previewCharacter: null,
       loading: false,
       needsUpdate: false,
       strBuff: 0,
@@ -47,9 +47,12 @@ export class Leveler extends Component {
       return;
 
     this.setState ({ loading: true, needsUpdate: false });
+    this.updateCharacter(true);
+  }
 
-    fetch(
-      'api/Character/LevelUp/' + this.props.id + "?preview=true",
+  updateCharacter(preview) {
+    return fetch(
+      "api/Character/LevelUp/" + this.props.id + "?preview=" + preview,
       {
         method: "POST",
         headers: {
@@ -72,7 +75,10 @@ export class Leveler extends Component {
       })
       .then(response => response.json())
       .then(data => {
-        this.setState({ character: data, loading: false});
+        this.setState({
+          previewCharacter: data,
+          loading: false});
+        return data;
       });
   }
 
@@ -90,6 +96,13 @@ export class Leveler extends Component {
         break;
     }
     return buff > 0 ? "success" : "default";
+  }
+
+  getDisplayCharacter() {
+    if (this.state.previewCharacter)
+      return this.state.previewCharacter;
+    else
+      return this.props.character;
   }
 
   renderAbilityButton(ability) {
@@ -127,7 +140,7 @@ export class Leveler extends Component {
           +{buff}
         </Label>
         <Button
-          disabled={this.state.character.levelsAvailable > 0 ? false : true}
+          disabled={this.getDisplayCharacter().levelsAvailable > 0 ? false : true}
           onClick={_ => this.handleAbilityChange(ability, 1)}
           bsSize="small">
           +
@@ -136,10 +149,10 @@ export class Leveler extends Component {
     );
   }
 
-  render() {
+  renderModalBody() {
     return (
       <div>
-        <p>Levels Available: {this.state.character.levelsAvailable} / {this.props.character.levelsAvailable}</p>
+        <p>Levels Available: {this.getDisplayCharacter().levelsAvailable} / {this.props.character.levelsAvailable}</p>
         <Grid fluid>
           <Row>
             <Col sm={4}>
@@ -153,8 +166,59 @@ export class Leveler extends Component {
             </Col>
           </Row>
         </Grid>
-        <CharacterDetails character={this.state.character}/>
+        <CharacterDetails character={this.getDisplayCharacter()}/>
       </div>
     );
+  }
+
+  resetState() {
+    this.setState({
+      strBuff: 0,
+      dexBuff: 0,
+      mindBuff: 0,
+      previewCharacter: null,
+      loading: false,
+      needsUpdate: false,
+    });
+  }
+
+  onCanceled() {
+    this.resetState();
+    this.props.onCanceled();
+  }
+
+  onSubmit() {
+    this.updateCharacter(false)
+      .then(character => {
+        this.props.onChanged(character);
+        this.resetState();
+      })
+  }
+
+  render() {
+    return (
+      <div>
+        <Modal show={this.props.show} onHide={e => this.props.onCanceled()}>
+          <Modal.Header closeButton>
+            <Modal.Title>Level Up!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {this.renderModalBody()}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              onClick={e => this.onCanceled()}>
+              Close
+            </Button>
+            <Button
+              bsStyle="primary"
+              disabled={this.props.character.levelsAvailable == 0}
+              onClick={e => this.onSubmit()}>
+              Save changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    )
   }
 }

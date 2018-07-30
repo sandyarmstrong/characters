@@ -22,9 +22,10 @@ export class Character extends Component {
     this.setState({ leveling: true });
   }
 
-  handleDoneLeveling() {
+  handleDoneLeveling(character) {
+    if (character)
+      this.setState({ character: character });
     this.setState({ leveling: false });
-    // TODO: refresh character from Leveler comp? or something?
   }
 
   renderCharacter(character) {
@@ -53,25 +54,12 @@ export class Character extends Component {
       <div>
         {charDiv}
 
-        <Modal show={this.state.leveling} onHide={e => this.handleDoneLeveling()}>
-          <Modal.Header closeButton>
-            <Modal.Title>Level Up!</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Leveler id="1" character={this.state.character}/>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              onClick={e => this.handleDoneLeveling()}>
-              Close
-            </Button>
-            <Button
-              bsStyle="primary"
-              onClick={e => this.handleDoneLeveling()}>
-              Save changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <Leveler
+          id="1"
+          character={this.state.character}
+          show={this.state.leveling}
+          onCanceled = {_ => this.handleDoneLeveling()}
+          onChanged = {character => this.handleDoneLeveling(character)}/>
       </div>
     )
   }
