@@ -60,7 +60,7 @@ export class CharacterDetails extends Component {
 
     return (
       <div>
-        <div className="stat-bar">
+        <div className="stat-bar stat-basic">
           <StatCard
             stat="LVL"
             total={character.level}/>
@@ -72,7 +72,7 @@ export class CharacterDetails extends Component {
             total={character.experience}/>
         </div>
 
-        <div className="stat-bar">
+        <div className="stat-bar stat-defense">
           {character.defenses.map(defense =>
             <StatCard
               stat={this.getDefenseTypeAbbreviation(defense.type)}

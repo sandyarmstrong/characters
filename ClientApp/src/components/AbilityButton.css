@@ -62,21 +62,32 @@
   border-radius: 0px 0px 5px 5px;
 }
 
-.stat-label {
+.stat {
   font-size: 32px;
   font-family: monospace;
+}
+
+.stat-ability .stat {
+  background-color: #cedfe0;
+}
+
+.stat-basic .stat {
+  background-color: rgb(135, 197, 83);
+}
+
+.stat-defense .stat {
+  background-color: rgb(119, 206, 221);
+}
+
+.stat-label {
   padding-top: 5px;
   padding-left: 5px;
   padding-right: 5px;
-  background-color: #cedfe0;
   min-width: calc(3ch + 10px);
 }
 
 .stat-total {
-  font-size: 32px;
-  font-family: monospace;
   font-weight: bold;
-  background-color: #cedfe0;
 }
 
 .ability-mod {

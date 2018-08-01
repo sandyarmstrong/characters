@@ -1,7 +1,7 @@
 //@ts-check
 import React, { Component } from 'react';
 import { Badge, Button, Modal } from 'react-bootstrap';
-import { AbilityButton } from './AbilityButton';
+import { StatCard } from './AbilityButton';
 import { CharacterDetails } from './CharacterDetails';
 import { Leveler } from './Leveler';
 
@@ -43,22 +43,16 @@ export class Character extends Component {
       <div>
         <h1>{character.name} ({character.playerName}) <Badge onClick={e => this.levelUp()}>{character.levelsAvailable}</Badge></h1>
 
-        <div className="ability-button-bar">
-          <AbilityButton
-            ability="STR"
-            total={character.strength}
-            canEdit={false}
-            />
-          <AbilityButton
-            ability="DEX"
-            total={character.dexterity}
-            canEdit={false}
-            />
-          <AbilityButton
-            ability="MND"
-            total={character.mind}
-            canEdit={false}
-            />
+        <div className="stat-bar stat-ability">
+          <StatCard
+            stat="STR"
+            total={character.strength}/>
+          <StatCard
+            stat="DEX"
+            total={character.dexterity}/>
+          <StatCard
+            stat="MND"
+            total={character.mind}/>
         </div>
 
         <CharacterDetails character={character}/>

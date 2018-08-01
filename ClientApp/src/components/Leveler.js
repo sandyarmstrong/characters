@@ -135,7 +135,7 @@ export class Leveler extends Component {
             </Col>
           </Row>
         </Grid> */}
-        <div className="ability-button-bar">
+        <div className="ability-button-bar stat-ability">
           <AbilityButton
             ability="STR"
             total={character.strength}
