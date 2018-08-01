@@ -3,10 +3,20 @@
   margin-left: 10px;
 } */
 
-.ability {
+.ability, .stat-card {
   display: inline-block;
   text-align: center;
   line-height: 1;
+}
+
+.stat-bar {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.stat-bar .stat-card {
+  /* Or use grid? */
+  margin-right: 20px;
 }
 
 /* .ability.read-only { */
@@ -52,16 +62,17 @@
   border-radius: 0px 0px 5px 5px;
 }
 
-.ability-label {
+.stat-label {
   font-size: 32px;
   font-family: monospace;
   padding-top: 5px;
   padding-left: 5px;
   padding-right: 5px;
   background-color: #cedfe0;
+  min-width: calc(3ch + 10px);
 }
 
-.ability-total {
+.stat-total {
   font-size: 32px;
   font-family: monospace;
   font-weight: bold;

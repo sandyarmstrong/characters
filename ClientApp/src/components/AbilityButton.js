@@ -2,6 +2,29 @@
 import React, { Component } from 'react';
 import './AbilityButton.css'
 
+export class Stat extends Component {
+  render() {
+    return (
+      <div className="stat">
+        <div className="stat-label">{this.props.stat}</div>
+        <div className="stat-total">{this.props.total}</div>
+      </div>
+    );
+  }
+}
+
+export class StatCard extends Component {
+  render() {
+    return (
+      <div className="stat-card">
+        <Stat
+          stat={this.props.stat}
+          total={this.props.total}/>
+      </div>
+    );
+  }
+}
+
 export class AbilityButton extends Component {
   render() {
     var cName = "ability";
@@ -18,8 +41,9 @@ export class AbilityButton extends Component {
             +
           </button> :
           "" }
-        <div className="ability-label">{this.props.ability}</div>
-        <div className="ability-total">{this.props.total}</div>
+        <Stat
+          stat={this.props.ability}
+          total={this.props.total}/>
         { this.props.canEdit ?
           <div className="ability-mod">+{this.props.mod}</div> :
           "" }  

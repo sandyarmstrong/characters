@@ -1,6 +1,7 @@
 //@ts-check
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
+import { StatCard } from './AbilityButton';
 
 export class CharacterDetails extends Component {
   displayName = CharacterDetails.name
@@ -40,6 +41,17 @@ export class CharacterDetails extends Component {
     return buffsStr;
   }
 
+  getDefenseTypeAbbreviation(defenseType) {
+    switch(defenseType) {
+      case "Melee":
+        return "MD";
+      case "Ranged":
+        return "RD";
+      case "Spell":
+        return "SPD";
+    }
+  }
+
   renderCharacter(character) {
     if (character == null)
       return (
@@ -48,26 +60,24 @@ export class CharacterDetails extends Component {
 
     return (
       <div>
-        <Table striped bordered condensed hover>
-          <tbody>
-            <tr>
-              <td>Level</td>
-              <td>{character.level}</td>
-            </tr>
-            <tr>
-              <td>XP</td>
-              <td>{character.experience}</td>
-            </tr>
-            <tr>
-              <td>HP</td>
-              <td>{character.hitPoints}</td>
-            </tr>
-            <tr>
-              <td>Heroism</td>
-              <td>{character.heroism}</td>
-            </tr>
-          </tbody>
-        </Table>
+        <div className="stat-bar">
+          <StatCard
+            stat="LVL"
+            total={character.level}/>
+          <StatCard
+            stat="HP"
+            total={character.hitPoints}/>
+          <StatCard
+            stat="XP"
+            total={character.experience}/>
+        </div>
+
+        <div className="stat-bar">
+          {character.defenses.map(defense =>
+            <StatCard
+              stat={this.getDefenseTypeAbbreviation(defense.type)}
+              total={defense.modifier}/>)}
+        </div>
 
         <h2>Attacks</h2>
         <Table striped bordered condensed hover>
@@ -86,23 +96,6 @@ export class CharacterDetails extends Component {
                 <td>{attack.combatModifier.combatType}</td>
                 <td>{CharacterDetails.renderCombatModifier(attack.combatModifier)}</td>
                 <td>{attack.combatModifier.failPercentage}%</td>
-              </tr>)}
-          </tbody>
-        </Table>
-
-        <h2>Defense</h2>
-        <Table striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Defense</th>
-            </tr>
-          </thead>
-          <tbody>
-            {character.defenses.map(defense =>
-              <tr>
-                <td>{defense.type}</td>
-                <td>{defense.modifier}</td>
               </tr>)}
           </tbody>
         </Table>

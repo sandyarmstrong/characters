@@ -161,6 +161,7 @@ export class Leveler extends Component {
             mod={this.state.mindBuff}
             />
         </div>
+        <hr />
         <CharacterDetails character={character}/>
       </div>
     );
