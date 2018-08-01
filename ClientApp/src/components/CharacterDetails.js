@@ -66,18 +66,6 @@ export class CharacterDetails extends Component {
               <td>Heroism</td>
               <td>{character.heroism}</td>
             </tr>
-            <tr>
-              <td>Strength</td>
-              <td>{character.strength}</td>
-            </tr>
-            <tr>
-              <td>Dexterity</td>
-              <td>{character.dexterity}</td>
-            </tr>
-            <tr>
-              <td>Mind</td>
-              <td>{character.mind}</td>
-            </tr>
           </tbody>
         </Table>
 

@@ -1,0 +1,74 @@
+/* .ability-button-bar .ability {
+  margin-right: 10px;
+  margin-left: 10px;
+} */
+
+.ability {
+  display: inline-block;
+  text-align: center;
+  line-height: 1;
+}
+
+/* .ability.read-only { */
+  /* Some border changes maybe? */
+/* } */
+
+.ability button {
+  border: none;
+  font-size: 18px;
+  width: 100%;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.ability button:disabled {
+  background-color: #ccc;
+}
+
+.button-plus:hover:not(:disabled) {
+  background-color: #7fc697;
+}
+
+.button-plus:active:not(:disabled) {
+  background-color: #75b58b;
+}
+
+.button-plus {
+  background-color: #90dbaa;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.button-minus:hover:not(:disabled) {
+  background-color: #c94646;
+}
+
+.button-minus:active:not(:disabled) {
+  background-color: #a53838;
+}
+
+.button-minus {
+  padding-top: 5px;
+  background-color: #f95959;
+  border-radius: 0px 0px 5px 5px;
+}
+
+.ability-label {
+  font-size: 32px;
+  font-family: monospace;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: #cedfe0;
+}
+
+.ability-total {
+  font-size: 32px;
+  font-family: monospace;
+  font-weight: bold;
+  background-color: #cedfe0;
+}
+
+.ability-mod {
+  font-family: monospace;
+  background-color: #cedfe0;
+}

@@ -1,7 +1,9 @@
 //@ts-check
 import React, { Component } from 'react';
 import { Button, Modal, Grid, Row, Col, Label } from 'react-bootstrap';
+import { AbilityButton } from './AbilityButton';
 import { CharacterDetails } from './CharacterDetails';
+import './Leveler.css';
 
 export class Leveler extends Component {
   displayName = Leveler.name
@@ -82,22 +84,6 @@ export class Leveler extends Component {
       });
   }
 
-  getBuffButtonStyle(ability) {
-    var buff;
-    switch (ability) {
-      case "strength":
-        buff = this.state.strBuff;
-        break;
-      case "dexterity":
-        buff = this.state.dexBuff;
-        break;
-      case "mind":
-        buff = this.state.mindBuff;
-        break;
-    }
-    return buff > 0 ? "success" : "default";
-  }
-
   getDisplayCharacter() {
     if (this.state.previewCharacter)
       return this.state.previewCharacter;
@@ -105,67 +91,77 @@ export class Leveler extends Component {
       return this.props.character;
   }
 
-  renderAbilityButton(ability) {
-    var label, buff;
-    switch (ability) {
-      case "strength":
-        label = "Strength";
-        buff = this.state.strBuff;
-        break;
-      case "dexterity":
-        label = "Dexterity";
-        buff = this.state.dexBuff;
-        break;
-      case "mind":
-        label = "Mind";
-        buff = this.state.mindBuff;
-        break;
-    }
-
-    return (
-      <div>
-        <h4>
-          <Label
-            bsStyle={this.getBuffButtonStyle(ability)}>
-            {label}
-          </Label>
-        </h4>
-        <Button
-          disabled={buff == 0}
-          onClick={_ => this.handleAbilityChange(ability, -1)}
-          bsSize="small">
-          -
-        </Button>
-        <Label>
-          +{buff}
-        </Label>
-        <Button
-          disabled={this.getDisplayCharacter().levelsAvailable > 0 ? false : true}
-          onClick={_ => this.handleAbilityChange(ability, 1)}
-          bsSize="small">
-          +
-        </Button>
-      </div>
-    );
+  getCanIncrease () {
+    return (this.state.strBuff + this.state.dexBuff + this.state.mindBuff) <
+      this.props.character.levelsAvailable;
   }
 
   renderModalBody() {
+    let character = this.getDisplayCharacter();
+    let canIncrease = this.getCanIncrease();
     return (
       <div>
-        <Grid fluid>
+        {/* <Grid fluid>
           <Row>
-            <Col sm={4}>
-              {this.renderAbilityButton("strength")}
+            <Col sm={3}>
+              <AbilityButton
+                ability="STR"
+                total={character.strength}
+                canEdit={true}
+                canIncrease={canIncrease}
+                onChange={mod => this.handleAbilityChange("strength", mod)}
+                mod={this.state.strBuff}
+                />
             </Col>
-            <Col sm={4}>
-              {this.renderAbilityButton("dexterity")}
+            <Col sm={3}>
+              <AbilityButton
+                ability="DEX"
+                total={character.dexterity}
+                canEdit={true}
+                canIncrease={canIncrease}
+                onChange={mod => this.handleAbilityChange("dexterity", mod)}
+                mod={this.state.dexBuff}
+                />
             </Col>
-            <Col sm={4}>
-              {this.renderAbilityButton("mind")}
+            <Col sm={3}>
+              <AbilityButton
+                ability="MND"
+                total={character.mind}
+                canEdit={true}
+                canIncrease={canIncrease}
+                onChange={mod => this.handleAbilityChange("mind", mod)}
+                mod={this.state.mindBuff}
+                />
             </Col>
           </Row>
-        </Grid>
-        <CharacterDetails character={this.getDisplayCharacter()}/>
+        </Grid> */}
+        <div className="ability-button-bar">
+          <AbilityButton
+            ability="STR"
+            total={character.strength}
+            canEdit={true}
+            canIncrease={canIncrease}
+            onChange={mod => this.handleAbilityChange("strength", mod)}
+            mod={this.state.strBuff}
+            />
+          <AbilityButton
+            ability="DEX"
+            total={character.dexterity}
+            canEdit={true}
+            canIncrease={canIncrease}
+            onChange={mod => this.handleAbilityChange("dexterity", mod)}
+            mod={this.state.dexBuff}
+            />
+          <AbilityButton
+            ability="MND"
+            total={character.mind}
+            canEdit={true}
+            canIncrease={canIncrease}
+            onChange={mod => this.handleAbilityChange("mind", mod)}
+            mod={this.state.mindBuff}
+            />
+        </div>
+        <CharacterDetails character={character}/>
       </div>
     );
   }
