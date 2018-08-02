@@ -15,8 +15,7 @@ export class Admin extends Component {
       loading: true};
 
     this.handleCharactersPromise (fetch ("api/Character/All"));
-    this.handleWeaponsPromise (fetch ("api/Stash/Weapons"));
-    this.handleItemsPromise (fetch ("api/Stash/Items"));
+    this.handleStashPromise (fetch ("api/Stash/All"));
   }
 
   handleCharactersPromise (request) {
@@ -27,25 +26,28 @@ export class Admin extends Component {
       });
   }
 
-  handleWeaponsPromise (request) {
+  handleStashPromise (request) {
     request
       .then(response => response.json())
       .then(data => {
-        this.setState({ weapons: data, loading: false });
-      });
-  }
-
-  handleItemsPromise (request) {
-    request
-      .then(response => response.json())
-      .then(data => {
-        this.setState({ items: data, loading: false });
+        this.setState({
+          weapons: data.weapons,
+          items: data.items,
+          loading: false });
       });
   }
 
   resetAll() {
     this.handleCharactersPromise(fetch (
       "api/Character/Reset",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }));
+    this.handleStashPromise(fetch (
+      "api/Stash/Reset",
       {
         method: "POST",
         headers: {
@@ -93,7 +95,18 @@ export class Admin extends Component {
   }
 
   createWeapon() {
-
+    this.handleStashPromise(fetch (
+      "api/Stash/CreateWeapon",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "Ranged",
+          name: "Legolas's Bow",
+        }),
+      }));
   }
 
   renderItemRow(item) {
@@ -107,7 +120,18 @@ export class Admin extends Component {
   }
 
   createItem() {
-
+    this.handleStashPromise(fetch (
+      "api/Stash/CreateItem",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "Armor",
+          name: "Dragonscale",
+        }),
+      }));
   }
 
   render() {
@@ -129,10 +153,6 @@ export class Admin extends Component {
               this.renderCharacterRow(character))}
           </tbody>
         </Table>
-        <Button
-          onClick={() => this.resetAll()}>
-          Reset All Data
-        </Button>
         <Button
           onClick={() => this.grantClicked()}>
           Grant One Level To All Characters
@@ -177,6 +197,13 @@ export class Admin extends Component {
             onClick={() => this.createItem()}>
             Create New Item
           </Button>
+
+        <hr />
+
+        <Button
+          onClick={() => this.resetAll()}>
+          Reset All Data
+        </Button>
       </div>
     );
   }

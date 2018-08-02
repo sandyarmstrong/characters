@@ -32,13 +32,15 @@ export class CharacterDetails extends Component {
 
   static renderBuffList(buffs) {
     var buffsStr = "";
-    for (var i = 0; i < buffs.length; i++) {
-      if (buffs [i] == null)
-        continue;
-      const mod = buffs [i].modifier;
-      buffsStr += buffs [i].type + (mod > 0 ? "+" : "") + mod;
-      if (i < buffs.length - 1)
-        buffsStr += ", ";
+    if (buffs != null) {
+      for (var i = 0; i < buffs.length; i++) {
+        if (buffs [i] == null)
+          continue;
+        const mod = buffs [i].modifier;
+        buffsStr += buffs [i].type + (mod > 0 ? "+" : "") + mod;
+        if (i < buffs.length - 1)
+          buffsStr += ", ";
+      }
     }
     return buffsStr;
   }

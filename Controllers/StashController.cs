@@ -19,6 +19,23 @@ namespace characters.Controllers
         static readonly Dictionary<string, Weapon> WeaponDatabase =
             new Dictionary<string, Weapon> ();
 
+        public class Stash
+        {
+            public IReadOnlyList<Item> Items { get; }
+
+            public IReadOnlyList<Weapon> Weapons { get; }
+
+            public Stash (
+                IReadOnlyList<Item> items,
+                IReadOnlyList<Weapon> weapons)
+            {
+                Items = items
+                    ?? throw new ArgumentNullException (nameof (items));
+                Weapons = weapons
+                    ?? throw new ArgumentNullException (nameof (weapons));
+            }
+        }
+
         static StashController ()
         {
             ResetDatabase ();
@@ -51,35 +68,40 @@ namespace characters.Controllers
         }
 
         [HttpGet]
-        public IReadOnlyList<Weapon> Weapons ()
+        public Stash All ()
         {
-            return WeaponDatabase.Values.ToArray ();
-        }
-
-        [HttpGet]
-        public IReadOnlyList<Item> Items ()
-        {
-            return ItemDatabase.Values.ToArray ();
+            return new Stash (
+                ItemDatabase.Values.ToArray (),
+                WeaponDatabase.Values.ToArray ());
         }
 
         [HttpPost]
-        public void Reset ()
+        public Stash Reset ()
         {
             ResetDatabase ();
-            // TODO: Return all stash data together or no?
-            //return All ();
+            return All ();
         }
 
         // TODO: Give stuff to characters
 
         [HttpPost]
-        public IReadOnlyList<Weapon> Weapons (
+        public Stash CreateWeapon (
             [FromBody] Weapon weapon)
         {
             if (weapon.Id == null)
                 weapon = new Weapon (null, weapon.Name, weapon.Type, weapon.Buff);
             WeaponDatabase [weapon.Id] = weapon;
-            return Weapons ();
+            return All ();
+        }
+
+        [HttpPost]
+        public Stash CreateItem (
+            [FromBody] Item item)
+        {
+            if (item.Id == null)
+                item = new Item (null, item.Type, item.Name, item.Modifiers);
+            ItemDatabase [item.Id] = item;
+            return All ();
         }
     }
 }
