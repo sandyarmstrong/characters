@@ -10,7 +10,7 @@ export class NavMenu extends Component {
 
   render() {
     return (
-      <Navbar inverse fixedTop fluid collapseOnSelect>
+      <Navbar inverse staticTop fluid collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
             <Link to={'/'}>Nanolite Tools</Link>

@@ -1,6 +1,6 @@
 //@ts-check
 import React, { Component } from 'react';
-import { Button, Modal, Grid, Row, Col, Label } from 'react-bootstrap';
+import { Button, Modal, /*Grid, Row, Col*/ } from 'react-bootstrap';
 import { AbilityButton } from './AbilityButton';
 import { CharacterDetails } from './CharacterDetails';
 import './Leveler.css';

@@ -86,7 +86,7 @@ export class CharacterDetails extends Component {
               <th>Attack</th>
               <th>Type</th>
               <th>CM</th>
-              <th>Failure Rate</th>
+              <th>Fail</th>
             </tr>
           </thead>
           <tbody>
