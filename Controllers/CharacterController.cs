@@ -34,6 +34,7 @@ namespace characters.Controllers
                 3,
                 3,
                 6,
+                null,
                 new [] {
                     new Weapon ("Dueling Sword", CombatType.Melee),
                     new Weapon ("Dueling Dagger", CombatType.Melee),
@@ -73,6 +74,16 @@ namespace characters.Controllers
                     character.LevelsAvailable + 1));
             }
             return All ();
+        }
+
+        [HttpPost("{id}")]
+        public Character UpdateNotes (
+            string id,
+            [FromBody] string notes)
+        {
+            var character = CharacterDatabase [id].WithNotes (notes);
+            UpsertCharacter (character);
+            return character;
         }
 
         [HttpGet("{id}")]

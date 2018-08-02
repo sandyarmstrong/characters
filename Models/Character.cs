@@ -29,6 +29,8 @@ namespace characters.Models
 
         public int Heroism { get; }
 
+        public string Notes { get; }
+
         public IReadOnlyList<Defense> Defenses { get; }
 
         public IReadOnlyList<Attack> Attacks { get; }
@@ -47,6 +49,7 @@ namespace characters.Models
             int strength,
             int dexterity,
             int mind,
+            string notes,
             IReadOnlyList<Weapon> weapons,
             IReadOnlyList<Item> items)
         {
@@ -62,6 +65,7 @@ namespace characters.Models
             Strength = strength;
             Dexterity = dexterity;
             Mind = mind;
+            Notes = notes;
             Weapons = weapons.ToArray ();
             Items = items?.ToArray () ?? Array.Empty<Item> ();
             // TODO: Does it make sense that weapons are not just items?
@@ -168,8 +172,37 @@ namespace characters.Models
             };
         }
 
+        public Character WithNotes (string notes)
+        {
+            const int maxLength = 15000;
+            if (notes != null && notes.Length > maxLength)
+                throw new ArgumentException (
+                    $"Notes are limited to {maxLength} characters");
+
+            if (notes == Notes)
+                return this;
+
+            return new Character (
+                Id,
+                Name,
+                PlayerName,
+                Level,
+                LevelsAvailable,
+                Experience,
+                Strength,
+                Dexterity,
+                Mind,
+                notes,
+                Weapons,
+                Items);
+        }
+
         public Character WithLevelsAvailable (int levelsAvailable)
-            => new Character (
+        {
+            if (levelsAvailable == LevelsAvailable)
+                return this;
+
+            return new Character (
                 Id,
                 Name,
                 PlayerName,
@@ -179,8 +212,10 @@ namespace characters.Models
                 Strength,
                 Dexterity,
                 Mind,
+                Notes,
                 Weapons,
                 Items);
+        }
 
         public Character WithUpgrades (List<Buff> upgrades)
         {
@@ -210,6 +245,9 @@ namespace characters.Models
                 throw new ArgumentException (
                     $"You have selected {totalBuff} buffs, but only " +
                     $"{LevelsAvailable} are currently available");
+
+            if (totalBuff == 0)
+                return this;
             
             return new Character (
                 Id,
@@ -221,6 +259,7 @@ namespace characters.Models
                 Strength + strBuff,
                 Dexterity + dexBuff,
                 Mind + mindBuff,
+                Notes,
                 Weapons,
                 Items);
         }
