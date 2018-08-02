@@ -59,7 +59,8 @@
 }
 
 .stat {
-  font-size: 32px;
+  /* Maybe 32 on bigger screens like desktop? */
+  font-size: 24px;
   font-family: monospace;
 }
 
