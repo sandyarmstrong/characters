@@ -19,6 +19,10 @@
   margin-right: 20px;
 }
 
+.stat-bar .stat {
+  border-radius: 5px;
+}
+
 .ability button {
   border: none;
   font-size: 18px;
