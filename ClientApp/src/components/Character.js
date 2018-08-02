@@ -1,9 +1,9 @@
 //@ts-check
 import React, { Component } from 'react';
-import { Badge, Button, Modal } from 'react-bootstrap';
 import { StatCard } from './AbilityButton';
 import { CharacterDetails } from './CharacterDetails';
 import { Leveler } from './Leveler';
+import './Character.css';
 
 export class Character extends Component {
   displayName = Character.name
@@ -33,6 +33,16 @@ export class Character extends Component {
     this.setState({ leveling: false });
   }
 
+  renderAvailableLevelsButton(character) {
+    return (
+      <button
+        className="levels-badge"
+        onClick={e => this.levelUp()}>
+        {character.levelsAvailable}
+      </button>
+    )
+  }
+
   renderCharacter(character) {
     if (character == null)
       return (
@@ -41,7 +51,7 @@ export class Character extends Component {
 
     return (
       <div>
-        <h1>{character.name} ({character.playerName}) <Badge onClick={e => this.levelUp()}>{character.levelsAvailable}</Badge></h1>
+        <h1>{character.name} ({character.playerName}) {this.renderAvailableLevelsButton(character)}</h1>
 
         <div className="stat-bar stat-ability">
           <StatCard

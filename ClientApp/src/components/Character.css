@@ -1,0 +1,17 @@
+button.levels-badge {
+  border: none;
+  border-radius: 5px;
+  background-color: #dbe447;
+  color: #666;
+  font-size: 0.8em;
+}
+
+button.levels-badge:hover {
+  background-color: #9aa111;
+  color: white;
+}
+
+button.levels-badge:active {
+  background-color: black;
+  color: white;
+}
