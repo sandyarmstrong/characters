@@ -107,7 +107,6 @@ export class Leveler extends Component {
               <AbilityButton
                 ability="STR"
                 total={character.strength}
-                canEdit={true}
                 canIncrease={canIncrease}
                 onChange={mod => this.handleAbilityChange("strength", mod)}
                 mod={this.state.strBuff}
@@ -117,7 +116,6 @@ export class Leveler extends Component {
               <AbilityButton
                 ability="DEX"
                 total={character.dexterity}
-                canEdit={true}
                 canIncrease={canIncrease}
                 onChange={mod => this.handleAbilityChange("dexterity", mod)}
                 mod={this.state.dexBuff}
@@ -127,7 +125,6 @@ export class Leveler extends Component {
               <AbilityButton
                 ability="MND"
                 total={character.mind}
-                canEdit={true}
                 canIncrease={canIncrease}
                 onChange={mod => this.handleAbilityChange("mind", mod)}
                 mod={this.state.mindBuff}
@@ -139,7 +136,6 @@ export class Leveler extends Component {
           <AbilityButton
             ability="STR"
             total={character.strength}
-            canEdit={true}
             canIncrease={canIncrease}
             onChange={mod => this.handleAbilityChange("strength", mod)}
             mod={this.state.strBuff}
@@ -147,7 +143,6 @@ export class Leveler extends Component {
           <AbilityButton
             ability="DEX"
             total={character.dexterity}
-            canEdit={true}
             canIncrease={canIncrease}
             onChange={mod => this.handleAbilityChange("dexterity", mod)}
             mod={this.state.dexBuff}
@@ -155,7 +150,6 @@ export class Leveler extends Component {
           <AbilityButton
             ability="MND"
             total={character.mind}
-            canEdit={true}
             canIncrease={canIncrease}
             onChange={mod => this.handleAbilityChange("mind", mod)}
             mod={this.state.mindBuff}
