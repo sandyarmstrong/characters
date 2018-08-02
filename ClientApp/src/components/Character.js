@@ -76,10 +76,9 @@ export class Character extends Component {
     if (!this.state.character)
       return (<div><p><em>No character found</em></p></div>);
 
-    let charDiv = this.renderCharacter(this.state.character);
     return (
       <div>
-        {charDiv}
+        {this.renderCharacter(this.state.character)}
 
         <Leveler
           id="1"
