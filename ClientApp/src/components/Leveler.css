@@ -1,9 +1,20 @@
 .ability-button-bar {
   text-align: center;
-  margin-bottom: 10px;
 }
 
 .ability-button-bar .ability {
   /* Or use grid? */
   margin-right: 20px;
+}
+
+@media (max-width: 767px) {
+  .modal-header, .modal-body {
+    /* Reduce padding on mobile */
+    padding: 10px;
+  }
+
+  .modal-body hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 }
