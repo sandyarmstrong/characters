@@ -2,3 +2,15 @@
   padding-left: 15px;
   padding-right: 15px;
 }
+
+@media (min-width: 768px) {
+  .root-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
+  .main-body {
+    max-width: 800px;
+    flex: 1;
+  }
+}
