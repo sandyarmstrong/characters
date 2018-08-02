@@ -7,6 +7,8 @@ namespace characters.Models
 {
     public class Weapon
     {
+        public string Id { get; }
+
         public string Name { get; }
 
         public CombatType Type { get; }
@@ -14,21 +16,32 @@ namespace characters.Models
         public Buff? Buff { get; }
 
         public Weapon (
+            string id,
             string name,
             CombatType type,
-            Buff? buff = null
-        )
+            Buff? buff = null)
         {
+            Id = id ?? Guid.NewGuid ().ToString ();
             Name = name ?? throw new ArgumentNullException (nameof (name));
             Type = type;
             Buff = buff;
         }
 
-        public static readonly Weapon Fists = new Weapon (
+        public static Weapon Create (
+            string name,
+            CombatType type,
+            Buff? buff = null)
+            => new Weapon (
+                null,
+                name,
+                type,
+                buff);
+
+        public static readonly Weapon Fists = Create (
             "Fists",
             CombatType.Melee);
 
-        public static readonly Weapon Mind = new Weapon (
+        public static readonly Weapon Mind = Create (
             "Mind",
             CombatType.Spell);
     }

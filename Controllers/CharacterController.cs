@@ -36,9 +36,9 @@ namespace characters.Controllers
                 6,
                 null,
                 new [] {
-                    new Weapon ("Dueling Sword", CombatType.Melee),
-                    new Weapon ("Dueling Dagger", CombatType.Melee),
-                    new Weapon ("Throwing Dagger", CombatType.Ranged),
+                    Weapon.Create ("Dueling Sword", CombatType.Melee),
+                    Weapon.Create ("Dueling Dagger", CombatType.Melee),
+                    Weapon.Create ("Throwing Dagger", CombatType.Ranged),
                 },
                 new [] {
                     Item.CreateArmor (3, "Studded Leather"),

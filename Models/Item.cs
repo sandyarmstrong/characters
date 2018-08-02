@@ -9,6 +9,8 @@ namespace characters.Models
     //       worn one at a time)
     public class Item
     {
+        public string Id { get; }
+
         public ItemType Type { get; }
 
         public string Name { get; }
@@ -16,20 +18,32 @@ namespace characters.Models
         public IReadOnlyList<Buff> Modifiers { get; }
 
         public Item (
+            string id,
             ItemType type,
             string name = null,
             IReadOnlyList<Buff> modifiers = null)
         {
+            Id = id ?? Guid.NewGuid ().ToString ();
             Type = type;
             Name = name;
             Modifiers = modifiers?.ToArray ();
         }
 
+        public static Item Create (
+            ItemType type,
+            string name = null,
+            IReadOnlyList<Buff> modifiers = null)
+            => new Item (
+                null,
+                type,
+                name,
+                modifiers);
+
         public static Item CreateShield (
             int defense,
             string name = null,
             IReadOnlyList<Buff> modifiers = null)
-            => new Item (
+            => Create (
                 ItemType.Shield,
                 name,
                 new [] {
@@ -42,7 +56,7 @@ namespace characters.Models
             int defense,
             string name = null,
             IReadOnlyList<Buff> modifiers = null)
-            => new Item (
+            => Create (
                 ItemType.Armor,
                 name,
                 new [] {

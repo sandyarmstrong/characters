@@ -1,14 +1,22 @@
 //@ts-check
 import React, { Component } from 'react';
 import { Button, Table } from 'react-bootstrap';
+import { CharacterDetails } from './CharacterDetails';
 
 export class Admin extends Component {
   displayName = Admin.name
 
   constructor(props) {
     super(props);
-    this.state = { characters: [], loading: true};
-    this.handleCharactersPromise (fetch ("api/Character/All"))
+    this.state = {
+      characters: [],
+      weapons: [],
+      items: [],
+      loading: true};
+
+    this.handleCharactersPromise (fetch ("api/Character/All"));
+    this.handleWeaponsPromise (fetch ("api/Stash/Weapons"));
+    this.handleItemsPromise (fetch ("api/Stash/Items"));
   }
 
   handleCharactersPromise (request) {
@@ -16,6 +24,22 @@ export class Admin extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({ characters: data, loading: false });
+      });
+  }
+
+  handleWeaponsPromise (request) {
+    request
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ weapons: data, loading: false });
+      });
+  }
+
+  handleItemsPromise (request) {
+    request
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ items: data, loading: false });
       });
   }
 
@@ -55,7 +79,35 @@ export class Admin extends Component {
         <td>{character.level}</td>
         <td>{character.levelsAvailable}</td>
       </tr>
-    )
+    );
+  }
+
+  renderWeaponRow(weapon) {
+    return (
+      <tr>
+        <td>{weapon.type}</td>
+        <td>{weapon.name}</td>
+        <td>{CharacterDetails.renderBuffList([weapon.buff])}</td>
+      </tr>
+    );
+  }
+
+  createWeapon() {
+
+  }
+
+  renderItemRow(item) {
+    return (
+      <tr>
+        <td>{item.type}</td>
+        <td>{item.name}</td>
+        <td>{CharacterDetails.renderBuffList(item.modifiers)}</td>
+      </tr>
+    );
+  }
+
+  createItem() {
+
   }
 
   render() {
@@ -85,6 +137,46 @@ export class Admin extends Component {
           onClick={() => this.grantClicked()}>
           Grant One Level To All Characters
         </Button>
+
+        <h1>Weapons</h1>
+
+          <Table striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Buffs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.weapons.map(weapon =>
+                this.renderWeaponRow(weapon))}
+            </tbody>
+          </Table>
+          <Button
+            onClick={() => this.createWeapon()}>
+            Create New Weapon
+          </Button>
+
+        <h1>Items</h1>
+
+          <Table striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Buffs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.items.map(item =>
+                this.renderItemRow(item))}
+            </tbody>
+          </Table>
+          <Button
+            onClick={() => this.createItem()}>
+            Create New Item
+          </Button>
       </div>
     );
   }
