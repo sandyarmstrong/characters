@@ -20,4 +20,8 @@ export class Util {
     return fetch (url)
       .then (response => response.json());
   }
+
+  static getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
 }

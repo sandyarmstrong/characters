@@ -213,8 +213,6 @@ namespace characters.Models
                 Items);
         }
 
-        // TODO: Should this be WithWeapons? What about WithItem*? Item drops
-        //       make me want to merge weapons and items to reduce queries.
         public Character WithItems (IReadOnlyList<Item> items)
         {
             return new Character (

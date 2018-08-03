@@ -98,6 +98,20 @@ export class Admin extends Component {
       item));
   }
 
+  giveRandomWeapon() {
+    let randomCharacter = this.state.characters[Util.getRandomInt(this.state.characters.length)];
+    Util.postJson (
+      "api/Character/AddWeapon/" + randomCharacter.id,
+      this.state.weapons[Util.getRandomInt(this.state.weapons.length)]);
+  }
+
+  giveRandomItem() {
+    let randomCharacter = this.state.characters[Util.getRandomInt(this.state.characters.length)];
+    Util.postJson (
+      "api/Character/AddItem/" + randomCharacter.id,
+      this.state.items[Util.getRandomInt(this.state.items.length)]);
+  }
+
   render() {
     return (
       <div>
@@ -163,6 +177,16 @@ export class Admin extends Component {
             onSubmit={i => this.createItem(i)}/>
 
         <hr />
+
+        <Button
+          onClick={() => this.giveRandomWeapon()}>
+          Give Random Weapon to Random User
+        </Button>
+
+        <Button
+          onClick={() => this.giveRandomItem()}>
+          Give Random Item to Random User
+        </Button>
 
         <Button
           onClick={() => this.resetAll()}>

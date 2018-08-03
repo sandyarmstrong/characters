@@ -74,7 +74,7 @@ namespace characters.Controllers
             return All ();
         }
 
-        [Route("api/[controller]/{id}/[action]")]
+        [HttpPost("{id}")]
         public Character AddItem (
             string id,
             [FromBody] Item item)
@@ -90,7 +90,7 @@ namespace characters.Controllers
             return character;
         }
 
-        [Route("api/[controller]/{id}/[action]")]
+        [HttpPost("{id}")]
         public Character AddWeapon (
             string id,
             [FromBody] Weapon weapon)
