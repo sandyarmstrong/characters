@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap';
 import { StatCard } from './AbilityButton';
 import { CharacterDetails } from './CharacterDetails';
 import { Leveler } from './Leveler';
+import { Util } from '../util';
 import './Character.css';
 
 export class Character extends Component {
@@ -17,8 +18,7 @@ export class Character extends Component {
     if (props.match && props.match.params && props.match.params.id)
       id = props.match.params.id;
 
-    fetch('api/Character/Summary/' + id)
-      .then(response => response.json())
+    Util.getJson('api/Character/Summary/' + id)
       .then(data => {
         this.setState({ character: data, loading: false });
       });
@@ -80,16 +80,9 @@ export class Character extends Component {
   }
 
   handleSaveNotes() {
-    fetch (
+    Util.postJson (
       "api/Character/UpdateNotes/" + this.state.character.id,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(this.state.notes),
-      })
-      .then(response => response.json())
+      this.state.notes)
       .then(data => {
         this.setState({
           character: data,

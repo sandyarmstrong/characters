@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Button, Modal, /*Grid, Row, Col*/ } from 'react-bootstrap';
 import { AbilityButton } from './AbilityButton';
 import { CharacterDetails } from './CharacterDetails';
+import { Util } from '../util';
 import './Leveler.css';
 
 export class Leveler extends Component {
@@ -53,29 +54,22 @@ export class Leveler extends Component {
   }
 
   updateCharacter(preview) {
-    return fetch(
+    return Util.postJson(
       "api/Character/LevelUp/" + this.props.id + "?preview=" + preview,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      [
+        {
+          type: "Strength",
+          modifier: this.state.strBuff,
         },
-        body: JSON.stringify([
-          {
-            type: "Strength",
-            modifier: this.state.strBuff,
-          },
-          {
-            type: "Dexterity",
-            modifier: this.state.dexBuff,
-          },
-          {
-            type: "Mind",
-            modifier: this.state.mindBuff,
-          },
-        ])
-      })
-      .then(response => response.json())
+        {
+          type: "Dexterity",
+          modifier: this.state.dexBuff,
+        },
+        {
+          type: "Mind",
+          modifier: this.state.mindBuff,
+        },
+      ])
       .then(data => {
         this.setState({
           previewCharacter: data,

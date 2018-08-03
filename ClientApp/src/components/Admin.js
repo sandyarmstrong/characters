@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { CharacterDetails } from './CharacterDetails';
 import { ItemCreator } from './ItemCreator';
+import { Util } from '../util';
 
 export class Admin extends Component {
   displayName = Admin.name
@@ -15,13 +16,12 @@ export class Admin extends Component {
       items: [],
       loading: true};
 
-    this.handleCharactersPromise (fetch ("api/Character/All"));
-    this.handleStashPromise (fetch ("api/Stash/All"));
+    this.handleCharactersPromise (Util.getJson ("api/Character/All"));
+    this.handleStashPromise (Util.getJson ("api/Stash/All"));
   }
 
   handleCharactersPromise (request) {
     request
-      .then(response => response.json())
       .then(data => {
         this.setState({ characters: data, loading: false });
       });
@@ -29,7 +29,6 @@ export class Admin extends Component {
 
   handleStashPromise (request) {
     request
-      .then(response => response.json())
       .then(data => {
         this.setState({
           weapons: data.filter (item => item.type == "Weapon"),
@@ -39,34 +38,16 @@ export class Admin extends Component {
   }
 
   resetAll() {
-    this.handleCharactersPromise(fetch (
-      "api/Character/Reset",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }));
-    this.handleStashPromise(fetch (
-      "api/Stash/Reset",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }));
+    this.handleCharactersPromise(Util.postJson (
+      "api/Character/Reset"));
+    this.handleStashPromise(Util.postJson (
+      "api/Stash/Reset"));
   }
 
   grantLevels(ids) {
-    this.handleCharactersPromise(fetch (
+    this.handleCharactersPromise(Util.postJson (
       "api/Character/GrantLevels",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ids),
-      }));
+      ids));
   }
 
   grantClicked() {
@@ -96,15 +77,9 @@ export class Admin extends Component {
   }
 
   createWeapon(weapon) {
-    this.handleStashPromise(fetch (
+    this.handleStashPromise(Util.postJson (
       "api/Stash/CreateWeapon",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(weapon),
-      }));
+      weapon));
   }
 
   renderItemRow(item) {
@@ -118,15 +93,9 @@ export class Admin extends Component {
   }
 
   createItem(item) {
-    this.handleStashPromise(fetch (
+    this.handleStashPromise(Util.postJson (
       "api/Stash/CreateItem",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(item),
-      }));
+      item));
   }
 
   render() {
