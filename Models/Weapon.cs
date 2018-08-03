@@ -1,41 +1,35 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 
 namespace characters.Models
 {
-    public class Weapon
+    public class Weapon : Item
     {
-        public string Id { get; }
+        public CombatType CombatType { get; }
 
-        public string Name { get; }
-
-        public CombatType Type { get; }
-
-        public Buff? Buff { get; }
+        public override ItemType Type => ItemType.Weapon;
 
         public Weapon (
             string id,
             string name,
-            CombatType type,
-            Buff? buff = null)
+            CombatType combatType,
+            IReadOnlyList<Buff> modifiers = null) :
+            base (id, ItemType.Weapon, name, modifiers)
         {
-            Id = id ?? Guid.NewGuid ().ToString ();
-            Name = name ?? throw new ArgumentNullException (nameof (name));
-            Type = type;
-            Buff = buff;
+            if (name == null)
+                throw new ArgumentNullException (nameof (name));
+            CombatType = combatType;
         }
 
         public static Weapon Create (
             string name,
-            CombatType type,
-            Buff? buff = null)
+            CombatType combatType,
+            IReadOnlyList<Buff> modifiers = null)
             => new Weapon (
                 null,
                 name,
-                type,
-                buff);
+                combatType,
+                modifiers);
 
         public static readonly Weapon Fists = Create (
             "Fists",

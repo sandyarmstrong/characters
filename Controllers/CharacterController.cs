@@ -39,8 +39,6 @@ namespace characters.Controllers
                     Weapon.Create ("Dueling Sword", CombatType.Melee),
                     Weapon.Create ("Dueling Dagger", CombatType.Melee),
                     Weapon.Create ("Throwing Dagger", CombatType.Ranged),
-                },
-                new [] {
                     Item.CreateArmor (3, "Studded Leather"),
                 }));
         }
@@ -74,6 +72,30 @@ namespace characters.Controllers
                     character.LevelsAvailable + 1));
             }
             return All ();
+        }
+
+        [Route("api/[controller]/{id}/[action]")]
+        public Character AddItem (
+            string id,
+            [FromBody] Item item)
+        {
+            var character = CharacterDatabase [id];
+
+            var items = new List<Item> (character.Items);
+            items.Add (item);
+
+            character = character.WithItems (items);
+            UpsertCharacter (character);
+
+            return character;
+        }
+
+        [Route("api/[controller]/{id}/[action]")]
+        public Character AddWeapon (
+            string id,
+            [FromBody] Weapon weapon)
+        {
+            return AddItem (id, weapon);
         }
 
         [HttpPost("{id}")]

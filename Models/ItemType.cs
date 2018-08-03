@@ -12,6 +12,6 @@ namespace characters.Models
         Armor,
         Amulet,
         Ring,
-        //Weapon?
+        Weapon,
     }
 }

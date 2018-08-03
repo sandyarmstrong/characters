@@ -11,7 +11,7 @@ namespace characters.Models
     {
         public string Id { get; }
 
-        public ItemType Type { get; }
+        public virtual ItemType Type { get; }
 
         public string Name { get; }
 
@@ -26,7 +26,7 @@ namespace characters.Models
             Id = id ?? Guid.NewGuid ().ToString ();
             Type = type;
             Name = name;
-            Modifiers = modifiers?.ToArray ();
+            Modifiers = modifiers?.ToArray () ?? Array.Empty<Buff> ();
         }
 
         public static Item Create (

@@ -114,7 +114,7 @@ export class CharacterDetails extends Component {
             </tr>
           </thead>
           <tbody>
-            {character.items.map(item =>
+            {character.items.filter(item => item.type != "Weapon").map(item =>
               <tr>
                 <td>{item.type}</td>
                 <td>{item.name}</td>

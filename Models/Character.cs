@@ -35,8 +35,6 @@ namespace characters.Models
 
         public IReadOnlyList<Attack> Attacks { get; }
 
-        public IReadOnlyList<Weapon> Weapons { get; }
-
         public IReadOnlyList<Item> Items { get; }
 
         public Character (
@@ -50,7 +48,6 @@ namespace characters.Models
             int dexterity,
             int mind,
             string notes,
-            IReadOnlyList<Weapon> weapons,
             IReadOnlyList<Item> items)
         {
             Id = id
@@ -66,9 +63,7 @@ namespace characters.Models
             Dexterity = dexterity;
             Mind = mind;
             Notes = notes;
-            Weapons = weapons.ToArray ();
             Items = items?.ToArray () ?? Array.Empty<Item> ();
-            // TODO: Does it make sense that weapons are not just items?
 
             // TODO: Account for item/weapon buffs throughout
 
@@ -90,7 +85,7 @@ namespace characters.Models
                 }
             }
 
-            // TODO: Get buffs from weapons, too
+            // TODO: Make sure only equipped weapon buffs apply
 
             Attack CreateFromWeapon (Weapon weapon, int abilityVal, int modifiedAbilityVal)
             {
@@ -98,7 +93,7 @@ namespace characters.Models
                 return new Attack (
                     weapon.Name,
                     new CombatModifier (
-                        weapon.Type,
+                        weapon.CombatType,
                         dice.Count,
                         dice.Size,
                         modifiedAbilityVal + 0, // TODO: what is CMBase supposed to be?
@@ -112,8 +107,9 @@ namespace characters.Models
             Attack rangedAttack = null;
             Attack spellAttack = null;
 
-            foreach (var weapon in Weapons
-                .Where (w => w.Type == CombatType.Melee)) {
+            foreach (var weapon in items
+                .OfType<Weapon> ()
+                .Where (w => w.CombatType == CombatType.Melee)) {
                 if (meleeAttack == null) {
                     meleeAttack = CreateFromWeapon (
                         weapon,
@@ -142,13 +138,15 @@ namespace characters.Models
                     strength - 4);
 
             // TODO: Any sort of default ranged? Rock throwing?
-            rangedAttack = Weapons
-                .Where (w => w.Type == CombatType.Ranged)
+            rangedAttack = Items
+                .OfType<Weapon> ()
+                .Where (w => w.CombatType == CombatType.Ranged)
                 .Select (w => CreateFromWeapon (w, dexterity, dexterity))
                 .FirstOrDefault ();
             
-            var spellWeapon = Weapons
-                .Where (w => w.Type == CombatType.Spell)
+            var spellWeapon = Items
+                .OfType<Weapon> ()
+                .Where (w => w.CombatType == CombatType.Spell)
                 .FirstOrDefault () ?? Weapon.Mind;
             spellAttack = CreateFromWeapon (spellWeapon, mind, mind);
 
@@ -193,7 +191,6 @@ namespace characters.Models
                 Dexterity,
                 Mind,
                 notes,
-                Weapons,
                 Items);
         }
 
@@ -213,8 +210,25 @@ namespace characters.Models
                 Dexterity,
                 Mind,
                 Notes,
-                Weapons,
                 Items);
+        }
+
+        // TODO: Should this be WithWeapons? What about WithItem*? Item drops
+        //       make me want to merge weapons and items to reduce queries.
+        public Character WithItems (IReadOnlyList<Item> items)
+        {
+            return new Character (
+                Id,
+                Name,
+                PlayerName,
+                Level,
+                LevelsAvailable,
+                Experience,
+                Strength,
+                Dexterity,
+                Mind,
+                Notes,
+                items);
         }
 
         public Character WithUpgrades (List<Buff> upgrades)
@@ -260,7 +274,6 @@ namespace characters.Models
                 Dexterity + dexBuff,
                 Mind + mindBuff,
                 Notes,
-                Weapons,
                 Items);
         }
     }

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { CharacterDetails } from './CharacterDetails';
+import { ItemCreator } from './ItemCreator';
 
 export class Admin extends Component {
   displayName = Admin.name
@@ -31,8 +32,8 @@ export class Admin extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({
-          weapons: data.weapons,
-          items: data.items,
+          weapons: data.filter (item => item.type == "Weapon"),
+          items: data.filter (item => item.type != "Weapon"),
           loading: false });
       });
   }
@@ -87,14 +88,14 @@ export class Admin extends Component {
   renderWeaponRow(weapon) {
     return (
       <tr>
-        <td>{weapon.type}</td>
+        <td>{weapon.combatType}</td>
         <td>{weapon.name}</td>
-        <td>{CharacterDetails.renderBuffList([weapon.buff])}</td>
+        <td>{CharacterDetails.renderBuffList(weapon.modifiers)}</td>
       </tr>
     );
   }
 
-  createWeapon() {
+  createWeapon(weapon) {
     this.handleStashPromise(fetch (
       "api/Stash/CreateWeapon",
       {
@@ -102,10 +103,7 @@ export class Admin extends Component {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          type: "Ranged",
-          name: "Legolas's Bow",
-        }),
+        body: JSON.stringify(weapon),
       }));
   }
 
@@ -119,7 +117,7 @@ export class Admin extends Component {
     );
   }
 
-  createItem() {
+  createItem(item) {
     this.handleStashPromise(fetch (
       "api/Stash/CreateItem",
       {
@@ -127,10 +125,7 @@ export class Admin extends Component {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          type: "Armor",
-          name: "Dragonscale",
-        }),
+        body: JSON.stringify(item),
       }));
   }
 
@@ -173,10 +168,10 @@ export class Admin extends Component {
                 this.renderWeaponRow(weapon))}
             </tbody>
           </Table>
-          <Button
-            onClick={() => this.createWeapon()}>
-            Create New Weapon
-          </Button>
+
+          <ItemCreator
+            isWeapon={true}
+            onSubmit={w => this.createWeapon(w)}/>
 
         <h1>Items</h1>
 
@@ -193,10 +188,10 @@ export class Admin extends Component {
                 this.renderItemRow(item))}
             </tbody>
           </Table>
-          <Button
-            onClick={() => this.createItem()}>
-            Create New Item
-          </Button>
+
+          <ItemCreator
+            isWeapon={false}
+            onSubmit={i => this.createItem(i)}/>
 
         <hr />
 
